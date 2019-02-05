@@ -17,10 +17,10 @@ RUN         apt-get update && apt-get install -y python-pip \
                 libssl-dev \
                 inotify-tools \
                 ntp
-RUN         useradd --create-home shinken && \
-                pip install shinken pymongo>=3.0.3 requests arrow bottle==0.12.8 && \
-                update-rc.d -f apache2 remove && \
-                update-rc.d -f shinken remove
+RUN         useradd --create-home shinken
+RUN            pip install shinken pymongo>=3.0.3 requests arrow bottle==0.12.8
+RUN            update-rc.d -f apache2 remove
+RUN            update-rc.d -f shinken remove
 
 # Install shinken modules from shinken.io
 RUN         chown -R shinken:shinken /etc/shinken/ && \
