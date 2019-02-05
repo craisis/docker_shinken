@@ -33,7 +33,8 @@ RUN         chown -R shinken:shinken /etc/shinken/ && \
                 su - shinken -c 'shinken install logstore-sqlite' && \
                 su - shinken -c 'shinken install livestatus' && \
                 su - shinken -c 'shinken install graphite' && \
-                su - shinken -c 'shinken install ui-graphite'
+                su - shinken -c 'shinken install ui-graphite' && \
+                su - shinken -c 'shinken install status-dat'
 
 # Install Graphite
 RUN         pip install Twisted==11.1.0 && \
@@ -79,11 +80,15 @@ COPY        shinken/webui2_worldmap.cfg /var/lib/shinken/modules/webui2/plugins/
 ADD         shinken/livestatus.cfg /etc/shinken/modules/livestatus.cfg
 ADD         shinken/graphite.cfg /etc/shinken/modules/graphite.cfg
 ADD         shinken/ui-graphite.cfg /etc/shinken/modules/ui-graphite.cfg
+ADD         shinken/status-dat.cfg /etc/shinken/modules/status-dat.cfg
 RUN         mkdir -p /etc/shinken/custom_configs /usr/local/custom_plugins && \
                 ln -sf /etc/shinken/custom_configs/htpasswd.users /etc/shinken/htpasswd.users && \
                 rm -f /etc/thruk/htpasswd && \
                 ln -sf /etc/shinken/htpasswd.users /etc/thruk/htpasswd && \
-                chown -R shinken:shinken /etc/shinken/
+                chown -R shinken:shinken /etc/shinken/ && \
+            mkdir -p /var/lib/shinken/status-dat && \
+                chown -R shinken:shinken /var/lib/shinken/status-dat
+
 
 # Configure graphite
 ADD         graphite/carbon.conf /opt/graphite/conf/
@@ -105,7 +110,7 @@ RUN         cd /usr/lib/nagios/plugins/ && \
                 chmod u+s check_apt restart_service check_ping check_icmp check_fping apt_update
 
 # Define mountable directories
-VOLUME      ["/etc/shinken/custom_configs", "/usr/local/custom_plugins"]
+VOLUME      ["/etc/shinken/custom_configs", "/usr/local/custom_plugins", "/var/lib/shinken/status-dat"]
 
 # configure supervisor
 ADD         supervisor/conf.d/* /etc/supervisor/conf.d/
