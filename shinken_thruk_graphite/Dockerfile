@@ -17,7 +17,7 @@ RUN         apt-get update && apt-get install -y python-pip \
                 inotify-tools \
                 ntp
 RUN         useradd --create-home shinken
-RUN            pip install shinken pymongo>=3.0.3 requests arrow bottle==0.12.8
+RUN            pip install --install-option="--prefix=/" shinken pymongo>=3.0.3 requests arrow bottle==0.12.8
 RUN            update-rc.d -f apache2 remove
 RUN            update-rc.d -f shinken remove
 
@@ -36,15 +36,15 @@ RUN         chown -R shinken:shinken /etc/shinken/ && \
                 su - shinken -c 'shinken install status-dat'
 
 # Install Graphite
-RUN         pip install Twisted==11.1.0 && \
-                pip install flup==1.0.2 && \
-                pip install django==1.5.10 && \
-                pip install django-tagging==0.3.2 && \
-                pip install https://github.com/graphite-project/ceres/tarball/master && \
-                pip install whisper==0.9.12 && \
-                pip install carbon==0.9.12 && \
-                pip install graphite-web==0.9.12 && \
-                pip install gunicorn==19.1.1
+RUN         pip install --install-option="--prefix=/" Twisted==11.1.0 && \
+                pip install --install-option="--prefix=/" flup==1.0.2 && \
+                pip install --install-option="--prefix=/" django==1.5.10 && \
+                pip install --install-option="--prefix=/" django-tagging==0.3.2 && \
+                pip install --install-option="--prefix=/" https://github.com/graphite-project/ceres/tarball/master && \
+                pip install --install-option="--prefix=/" whisper==0.9.12 && \
+                pip install --install-option="--prefix=/" carbon==0.9.12 && \
+                pip install --install-option="--prefix=/" graphite-web==0.9.12 && \
+                pip install --install-option="--prefix=/" gunicorn==19.1.1
 
 # Install and configure thruk
 RUN         gpg --keyserver keys.gnupg.net --recv-keys F8C1CA08A57B9ED7 && \
